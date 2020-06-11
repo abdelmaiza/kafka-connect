@@ -1,9 +1,4 @@
 docker exec -it kafka bash
-
-docker exec -it mysql bash
-mysql -p -e "show variables like '%log_bin%';"
-
-
+cd /bin
 ./kafka-topics.sh --list --bootstrap-server 172.17.0.3:9092
-
 ./kafka-console-consumer.sh --bootstrap-server 172.17.0.3:9092 --topic globomantics.globomantics.articles --from-beginning
