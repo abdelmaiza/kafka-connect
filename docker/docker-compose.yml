@@ -44,8 +44,8 @@ services:
       - MYSQL_ROOT_PASSWORD=debezium
       - MYSQL_USER=mysqluser
       - MYSQL_PASSWORD=mysqlpw
-#    volumes:
-#      - //C:/workspace/amaiza/kafka-connect/docker/conf/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+    volumes:
+      - ./docker/conf/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.4.1
