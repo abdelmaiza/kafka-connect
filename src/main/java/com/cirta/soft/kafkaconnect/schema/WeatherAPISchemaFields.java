@@ -1,4 +1,4 @@
-package com.pluralsight.kafka.connect.schema;
+package com.cirta.soft.kafkaconnect.schema;
 
 public class WeatherAPISchemaFields {
 

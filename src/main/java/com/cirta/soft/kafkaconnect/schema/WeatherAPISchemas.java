@@ -1,9 +1,8 @@
-package com.pluralsight.kafka.connect.schema;
+package com.cirta.soft.kafkaconnect.schema;
 
+import static com.cirta.soft.kafkaconnect.schema.WeatherAPISchemaFields.*;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
-
-import static com.pluralsight.kafka.connect.schema.WeatherAPISchemaFields.*;
 
 public class WeatherAPISchemas {
 

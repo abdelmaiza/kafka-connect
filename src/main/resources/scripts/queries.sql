@@ -1,7 +1,7 @@
+-- globomantics
+
 GRANT SELECT, RELOAD, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT  ON *.* TO 'globomantics' IDENTIFIED BY 'password';
-
 GRANT ALL PRIVILEGES ON globomantics.* TO 'globomantics'@'%';
-
 USE globomantics;
 
 CREATE  TABLE `articles` (
@@ -25,3 +25,11 @@ INSERT INTO articles ( author, title, diagram, body, footnote ) VALUES
 UPDATE articles SET  footnote = “1 - large sets of data” WHERE author = “Maria”;
 
 DELETE FROM articles WHERE author=Tom;
+
+
+
+-- inventory
+GRANT SELECT, RELOAD, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT  ON *.* TO 'mysqluser' IDENTIFIED BY 'mysqlpw';
+GRANT ALL PRIVILEGES ON inventory.* TO 'mysqluser'@'%';
+USE inventory;
+DESCRIBE `addresses`;

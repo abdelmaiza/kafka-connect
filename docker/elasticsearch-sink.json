@@ -1,0 +1,12 @@
+{
+  "name": "elasticsearch-connector",
+  "config": {
+    "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+    "tasks.max": "1",
+    "topics": "dbserver1,dbserver1.inventory.addresses,dbserver1.inventory.customers,dbserver1.inventory.geom,dbserver1.inventory.orders,dbserver1.inventory.products,dbserver1.inventory.products_on_hand",
+    "key.ignore": "true", "schema.ignore": "true",
+    "connection.url": "http://elasticsearch:9200",
+    "type.name": "kafka-connect",
+    "name": "elasticsearch-connector"
+  }
+}

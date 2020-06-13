@@ -14,8 +14,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
-    image: debezium/kafka
-    hostname: kafka
+    image: debezium/kafka:1.1
     container_name: kafka
     depends_on:
       - zookeeper
@@ -26,7 +25,12 @@ services:
     # Use kafka:29092 for connections internal on the docker network
       - 9092:9092
     environment:
+      - BROKER_ID=1
+      - ADVERTISED_HOST_NAME=192.168.0.14
       - ZOOKEEPER_CONNECT=zookeeper:2181
+      - LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT
+      - INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - ADVERTISED_LISTENERS=PLAINTEXT://192.168.0.14:9092
 
   mysql:
     # *-----------------------------*
@@ -35,7 +39,7 @@ services:
     # or
     #   docker exec -it mysql bash -c 'mysql -u $MYSQL_USER -p$MYSQL_PASSWORD demo'
     # *-----------------------------*
-    image: debezium/example-mysql
+    image: debezium/example-mysql:1.1
     hostname: mysql
     container_name: mysql
     ports:
@@ -44,8 +48,6 @@ services:
       - MYSQL_ROOT_PASSWORD=debezium
       - MYSQL_USER=mysqluser
       - MYSQL_PASSWORD=mysqlpw
-    volumes:
-      - ./docker/conf/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.4.1
@@ -54,41 +56,13 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
-    ulimits:
-      nofile:
-        soft: 65535
-        hard: 65535
-      memlock:
-        soft: -1
-        hard: -1
     environment:
-      xpack.security.enabled: "false"
-      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
       discovery.type: "single-node"
-      node.store.allow_mmap: "false"
 
   connect-1:
-    image: debezium/connect:1.0
+    image: debezium/connect:1.1
     hostname: connect-1
     container_name: connect-1
-    ports:
-      - 8084:8083
-    links:
-      - zookeeper
-      - kafka
-      - mysql
-      - elasticsearch
-    environment:
-      - GROUP_ID=1
-      - BOOTSTRAP_SERVERS=kafka:9092
-      - CONFIG_STORAGE_TOPIC=my_connect_configs
-      - OFFSET_STORAGE_TOPIC=my_connect_offsets
-      - STATUS_STORAGE_TOPIC=my_connect_statuses
-
-  connect-2:
-    image: debezium/connect:1.0
-    hostname: connect-2
-    container_name: connect-2
     ports:
       - 8083:8083
     links:
@@ -103,3 +77,22 @@ services:
       - OFFSET_STORAGE_TOPIC=my_connect_offsets
       - STATUS_STORAGE_TOPIC=my_connect_statuses
 
+  connect-2:
+    image: debezium/connect:1.1
+    hostname: connect-2
+    container_name: connect-2
+    ports:
+      - 8084:8083
+    volumes:
+      - ./connectors/confluentinc-kafka-connect-elasticsearch-5.3.1/lib:/kafka/connect/elasticsearch/
+    links:
+      - zookeeper
+      - kafka
+      - mysql
+      - elasticsearch
+    environment:
+      - GROUP_ID=1
+      - BOOTSTRAP_SERVERS=kafka:9092
+      - CONFIG_STORAGE_TOPIC=my_connect_configs
+      - OFFSET_STORAGE_TOPIC=my_connect_offsets
+      - STATUS_STORAGE_TOPIC=my_connect_statuses

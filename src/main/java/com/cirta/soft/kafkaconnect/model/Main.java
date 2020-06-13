@@ -1,4 +1,4 @@
-package com.pluralsight.kafka.connect.model;
+package com.cirta.soft.kafkaconnect.model;
 
 import com.google.gson.annotations.SerializedName;
 
